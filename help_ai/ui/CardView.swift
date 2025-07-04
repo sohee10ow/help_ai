@@ -12,9 +12,10 @@ struct CardView: View {
     var title: String
     var count: Int
     var color: Color
+    
+    var isExpanded: Bool = false
 
     var body: some View {
-
             VStack(spacing: 8) {
                 
                 Text("\(icon)")
@@ -22,10 +23,6 @@ struct CardView: View {
                     .bold()
                     .foregroundColor(.primary)
                 
-//                Image(systemName: icon)
-//                    .font(.title2)
-//                    .foregroundColor(color)
-
                 Text(title)
                     .font(.caption)
                     .foregroundColor(.primary)
@@ -35,22 +32,18 @@ struct CardView: View {
                     .bold()
                     .foregroundColor(.primary)
             }
-            .frame(width: 160, height: 100)
+            .frame(width: isExpanded ? nil : 160, height: 100)
+            .frame(maxWidth: isExpanded ? .infinity : nil)
+        
             .background(.ultraThinMaterial) // 리퀴드 글래스 느낌
             .cornerRadius(20)
             .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
             
-            
-            
-            
-            
-        
-  
     }
     
 }
 
 
 #Preview {
-    CardView(icon: "calendar.badge.checkmark", title: "오늘", count: 5, color: .blue)
+    CardView(icon: "🔋", title: "오늘", count: 5, color: .blue)
 }
