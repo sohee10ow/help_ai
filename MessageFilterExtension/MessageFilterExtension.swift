@@ -57,8 +57,28 @@ extension MessageFilterExtension: ILMessageFilterQueryHandling, ILMessageFilterC
     }
 
     private func offlineAction(for queryRequest: ILMessageFilterQueryRequest) -> (ILMessageFilterAction, ILMessageFilterSubAction) {
-        // TODO: Replace with logic to perform offline check whether to filter first (if possible).
-        return (.none, .none)
+        guard let body = queryRequest.messageBody?.lowercased() else {
+            return (.none, .none)
+        }
+
+        // 기본 키워드
+        let defaultSpamKeywords = ["무료", "클릭", "당첨", "대출", "택배", "검찰", "사기", "입금"]
+
+        // 사용자 등록 키워드 (App Group 통해 공유)
+        let userDefaults = UserDefaults(suiteName: "group.helpai.shared") // ← AppGroup ID
+        let userKeywords = userDefaults?.stringArray(forKey: "UserSpamKeywords") ?? []
+
+        // 전체 키워드 목록
+        let allKeywords = defaultSpamKeywords + userKeywords
+
+        // 키워드 매칭 검사
+        for keyword in allKeywords {
+            if body.contains(keyword) {
+                return (.junk, .none) // 스팸함으로 이동
+            }
+        }
+
+        return (.allow, .none) // 정상 메시지
     }
 
     private func networkAction(for networkResponse: ILNetworkResponse) -> (ILMessageFilterAction, ILMessageFilterSubAction) {

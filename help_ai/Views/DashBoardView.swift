@@ -9,6 +9,10 @@ import SwiftUI
 
 struct DashBoardView: View {
     
+    @StateObject private var viewModel = KeyWordViewModel()
+    @State private var allowInput = ""
+    @State private var blockInput = ""
+    
     var body: some View {
    
         ZStack {
@@ -35,9 +39,16 @@ struct DashBoardView: View {
                 }.padding()
 
                 
-                TextFieldWidget(placeHolder: "허용할 문자를 입력해주세요.", label: "ADD", buttonColor: Color.blue)
-                    .padding(.horizontal)
-                TextFieldWidget(placeHolder: "차단할 문자를 입력해주세요.", label: "ADD", buttonColor: Color.red)
+                TextFieldWidget(text: $allowInput,placeHolder: "허용할 문자를 입력해주세요.", label: "ADD", buttonColor: Color.blue,
+                                onTap: {
+                    viewModel.addWhitelist(allowInput)
+                    allowInput = ""
+                }).padding(.horizontal)
+                TextFieldWidget( text: $blockInput,placeHolder: "차단할 문자를 입력해주세요.", label: "ADD", buttonColor: Color.red,
+                                 onTap: {
+                    viewModel.addBlacklist(blockInput)
+                    blockInput = ""
+                }     )
                     .padding(.horizontal)
                 
             }

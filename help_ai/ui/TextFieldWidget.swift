@@ -8,17 +8,21 @@
 import SwiftUI
 
 struct TextFieldWidget: View {
-    @State private var inputText: String = ""
+   //@State private var inputText: String = ""  >> 이 컴포넌트 안에서만 상태를 관리하는거 >> 상위 View와 데이터 연결이 어려움.
+   //(입력값을 ViewModel이나 상위에서 처리 가능)
+    @Binding var text: String
     var placeHolder: String
     var label: String
     var buttonColor: Color
+    
+    var onTap: () -> Void
     
     
     var body: some View {
 
             
             HStack(spacing: 12) {
-                    TextField(placeHolder, text: $inputText)
+                    TextField(placeHolder, text: $text)
                         .padding(.horizontal)
                         .padding(.vertical, 10)
                         .background(.ultraThinMaterial)
@@ -51,6 +55,4 @@ struct TextFieldWidget: View {
         
 }
 
-#Preview {
-    TextFieldWidget(placeHolder: "허용할 문자를 입력해주세요.", label: "ADD", buttonColor: Color.blue)
-}
+
