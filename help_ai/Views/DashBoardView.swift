@@ -25,6 +25,7 @@ struct DashBoardView: View {
             .ignoresSafeArea()
             
             VStack(spacing: 24) {
+                
                 let columns = [
                     GridItem(.flexible()),
                     GridItem(.flexible())

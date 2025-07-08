@@ -6,14 +6,28 @@
 //
 
 import SwiftUI
+import Foundation
+import CoreML
 
 struct ContentView: View {
+    @State private var inputText: String = ""
+    @State private var result: String = ""
+
+    @StateObject private var viewModel = MessageFilterViewModels()
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        VStack(spacing: 20) {
+            TextField("메시지를 입력하세요", text: $inputText)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding()
+
+            Button("분류하기") {
+                result = viewModel.classify(inputText)
+            }
+
+            Text("분류 결과: \(result)")
+                .font(.headline)
+                .foregroundColor(.blue)
         }
         .padding()
     }

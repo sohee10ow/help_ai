@@ -6,14 +6,27 @@
 //
 
 import Foundation
+import CoreML
+
 
 class MessageFilterViewModels: ObservableObject {
-    @Published var messages: [Message] = []
-    init() {
-          // 샘플 메시지 (나중에 CoreML 모델로 대체 가능)
-          messages = [
-              Message(content: "무료 당첨 축하드립니다!", sender: "070-1234-5678", isSpam: true, date: Date()),
-              Message(content: "회의 3시에 있어요", sender: "010-9876-5432", isSpam: false, date: Date())
-          ]
+    private let model: SpamClassifier
+
+      init() {
+          do {
+              self.model = try SpamClassifier(configuration: MLModelConfiguration())
+          } catch {
+              fatalError("❌ 모델 로딩 실패: \(error)")
+          }
+      }
+
+      func classify(_ text: String) -> String {
+          do {
+              let result = try model.prediction(text: text)
+              return result.label
+          } catch {
+              print("⚠️ 예측 실패: \(error)")
+              return "unknown"
+          }
       }
 }
